@@ -1,51 +1,13 @@
 {
   "todos": [
     {
-      "id": "91ad"
-    },
-    {
-      "id": "fd2e",
-      "subject": "asdf",
-      "completed": false
-    },
-    {
-      "id": "abe7",
-      "subject": " buy milk",
-      "completed": false
-    },
-    {
-      "id": "0a65",
-      "subject": " buy juice",
-      "completed": false
-    },
-    {
-      "id": "d04e",
-      "subject": " buy water",
-      "completed": false
-    },
-    {
-      "id": "ced5",
-      "subject": " asdf",
-      "completed": false
-    },
-    {
-      "id": "49f2",
-      "subject": "qwer",
-      "completed": false
-    },
-    {
-      "id": "1c27",
-      "subject": " asdr",
-      "completed": false
-    },
-    {
-      "id": "7407",
-      "subject": " 7890",
-      "completed": false
-    },
-    {
       "id": "da67",
       "subject": " 1234",
+      "completed": false
+    },
+    {
+      "id": "b6aa",
+      "subject": " 2345",
       "completed": false
     }
   ]
