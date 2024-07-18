@@ -1,9 +1,13 @@
 <template>
   <div class="container">
-    <h1>To-Do List</h1>
+    <h2>To-Do List</h2>
     <TodoSimpleForm @add-todo="addTodo" />
     <div v-if="!todos.length">추가된 Todo가 없습니다.</div>
-    <TodoList :todos="todos" />
+    <TodoList
+      :todos="todos"
+      @toggle-todo="toggleTodo"
+      @delete-todo="deleteTodo"
+    />
   </div>
 </template>
 
@@ -25,8 +29,11 @@ export default {
     };
 
     const addTodo = (todo) => {
-      console.log(todo);
       todos.value.push(todo);
+    };
+
+    const toggleTodo = (index) => {
+      todos.value[index].completed = !todos.value[index].completed;
     };
 
     const deleteTodo = (index) => {
@@ -37,6 +44,7 @@ export default {
       todos,
       todoStyle,
       addTodo,
+      toggleTodo,
       deleteTodo,
     };
   },
@@ -49,9 +57,5 @@ export default {
   text-decoration: line-through;
 
   text-align: center;
-
-  text-transform: capitalize'center;
 }
 </style>
-rtd;;dn이.유중  
-내 이름으웅피]ㅠㅣㅇㄿ후ㅏㄹ피사 로ㅡㅎㅅ  
