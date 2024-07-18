@@ -1,16 +1,17 @@
 <template>
   <div class="container">
-    <h4>count: {{ count }}</h4>
-    <h4>doble count: {{ doubleCountComputed }}</h4>
-    <h4>doble count: {{ doubleCountComputed }}</h4>
-    <h4>doble count: {{ doubleCountMethod() }}</h4>
-    <h4>doble count: {{ doubleCountMethod() }}</h4>
-    <button @click="count++">Add one</button>
     <h2>To-Do List</h2>
+    <input
+      class="form-control"
+      type="type"
+      v-model="searchText"
+      placeholder="Search"
+    />
+    <hr />
     <TodoSimpleForm @add-todo="addTodo" />
-    <div v-if="!todos.length">추가된 Todo가 없습니다.</div>
+    <div v-if="!filteredTodos.length">There is nothing to display</div>
     <TodoList
-      :todos="todos"
+      :todos="filteredTodos"
       @toggle-todo="toggleTodo"
       @delete-todo="deleteTodo"
     />
@@ -46,21 +47,15 @@ export default {
       todos.value.splice(index, 1);
     };
 
-    // computed 와 함수의 차이점 비교
-    const count = ref(1);
-
-    // 결과를 캐싱함.
-    const doubleCountComputed = computed(() => {
-      console.log("computed"); // 한 번만 출력됨.
-      return count.value * 2;
+    const searchText = ref("");
+    const filteredTodos = computed(() => {
+      if (searchText.value) {
+        return todos.value.filter((todo) => {
+          return todo.subject.includes(searchText.value);
+        });
+      }
+      return todos.value;
     });
-
-    // 함수는 인자를 받아서 함수 내에서 사용할 수 있다.
-    // 렌더링할 때마다 함수를 실행한다.
-    const doubleCountMethod = () => {
-      console.log("method"); // 두번 출력됨
-      return count.value * 2;
-    };
 
     return {
       todos,
@@ -68,9 +63,8 @@ export default {
       addTodo,
       toggleTodo,
       deleteTodo,
-      count,
-      doubleCountComputed,
-      doubleCountMethod,
+      searchText,
+      filteredTodos,
     };
   },
 };
