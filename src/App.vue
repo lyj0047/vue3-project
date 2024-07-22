@@ -34,6 +34,9 @@ export default {
   setup() {
     const todos = ref([]);
     const error = ref("");
+    // pagination comming soon
+    const searchText = ref("");
+    //  watch comming soon
 
     const getTodos = async () => {
       try {
@@ -90,7 +93,6 @@ export default {
       }
     };
 
-    const searchText = ref("");
     const filteredTodos = computed(() => {
       if (searchText.value) {
         return todos.value.filter((todo) => {
