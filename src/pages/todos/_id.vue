@@ -34,12 +34,13 @@
     </button>
   </form>
   <Toast v-if="showToast" :message="toastMessage" :type="toastAlertType" />
+  <div id="kossie">coder</div>
 </template>
 
 <script>
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
-import { ref, computed } from "vue";
+import { ref, computed, onUnmounted } from "vue";
 import _ from "lodash";
 import Toast from "@/components/Toast.vue";
 
@@ -56,7 +57,12 @@ export default {
     const showToast = ref(false);
     const toastMessage = ref("");
     const toastAlertType = ref("");
+    const timeout = ref(null);
     const todoId = route.params.id;
+    onUnmounted(() => {
+      console.log("onUnmounted");
+      clearTimeout(timeout.value);
+    });
 
     const getTodo = async () => {
       try {
@@ -91,11 +97,12 @@ export default {
       toastMessage.value = message;
       toastAlertType.value = type;
       showToast.value = true;
-      setTimeout(() => {
+      timeout.value = setTimeout(() => {
+        console.log("hello"); // 5초가 지나기 전에 페이지를 빠져나오면 더이상 콘솔에 hello 가 찍히지 않는다.
         toastMessage.value = "";
         toastAlertType.value = "";
         showToast.value = false;
-      }, 3000);
+      }, 5000);
     };
 
     const onSave = async () => {
