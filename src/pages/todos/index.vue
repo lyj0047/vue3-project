@@ -18,6 +18,7 @@
       @delete-todo="deleteTodo"
     />
   </div>
+  <Toast v-if="showToast" :message="toastMessage" :type="toastAlertType" />
 </template>
 
 <script>
@@ -25,11 +26,14 @@ import { ref, computed } from "vue";
 import TodoSimpleForm from "@/components/TodoSimpleForm.vue";
 import TodoList from "@/components/TodoList.vue";
 import axios from "axios";
+import Toast from "@/components/Toast.vue";
+import { useToast } from "@/composables/toast";
 
 export default {
   components: {
     TodoSimpleForm,
     TodoList,
+    Toast,
   },
   setup() {
     const todos = ref([]);
@@ -38,13 +42,15 @@ export default {
     const searchText = ref("");
     //  watch comming soon
 
+    const { showToast, toastMessage, toastAlertType, triggerToast } =
+      useToast();
     const getTodos = async () => {
       try {
         const res = await axios.get("http://localhost:3000/todos");
         todos.value = res.data;
       } catch (err) {
         console.log(err);
-        error.value = "Something went wrong.";
+        triggerToast("Something went wrong.", "danger");
       }
     };
 
@@ -61,7 +67,7 @@ export default {
         todos.value.push(res.data);
       } catch (err) {
         console.log(err);
-        error.value = "Something went wrong.";
+        triggerToast("Something went wrong.", "danger");
       }
     };
 
@@ -74,7 +80,7 @@ export default {
         todos.value.splice(index, 1);
       } catch (err) {
         console.log(err);
-        error.value = "Something went wrong.";
+        triggerToast("Something went wrong.", "danger");
       }
     };
 
@@ -90,7 +96,7 @@ export default {
         todos.value[index].completed = !todos.value[index].completed;
       } catch (err) {
         console.log(err);
-        error.value = "Something went wrong.";
+        triggerToast("Something went wrong.", "danger");
       }
     };
 
@@ -105,6 +111,9 @@ export default {
     });
     return {
       todos,
+      showToast,
+      toastMessage,
+      toastAlertType,
       addTodo,
       deleteTodo,
       toggleTodo,
