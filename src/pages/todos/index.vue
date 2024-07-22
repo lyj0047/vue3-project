@@ -79,7 +79,8 @@ export default {
       }
     };
 
-    const toggleTodo = async (index) => {
+    const toggleTodo = async (index, checked) => {
+      console.log(checked);
       error.value = "";
       const id = todos.value[index].id;
       try {
