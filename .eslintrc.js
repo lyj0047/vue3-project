@@ -8,4 +8,7 @@ module.exports = {
     parser: "@babel/eslint-parser",
     requireConfigFile: false,
   },
+  rules: {
+    "vue/multi-word-component-names": "off",
+  },
 };
