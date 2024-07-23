@@ -6,6 +6,7 @@
         <div class="form-group">
           <label>Subject</label>
           <input v-model="todo.subject" type="text" class="form-control" />
+          <div v-if="subjectError" style="color: red">{{ subjectError }}</div>
         </div>
       </div>
       <div v-if="editing" class="col-6">
@@ -43,7 +44,9 @@
       Cancel
     </button>
   </form>
-  <Toast v-if="showToast" :message="toastMessage" :type="toastAlertType" />
+  <transicion name="fade">
+    <Toast v-if="showToast" :message="toastMessage" :type="toastAlertType" />
+  </transicion>
 </template>
 
 <script>
@@ -72,6 +75,7 @@ export default {
       complited: false,
       body: "",
     });
+    const subjectError = ref("");
     const originalTodo = ref(null);
     const loading = ref(false);
 
@@ -114,14 +118,31 @@ export default {
     }
 
     const onSave = async () => {
+      subjectError.value = "";
+      if (!todo.value.subject) {
+        subjectError.value = "Subject is required";
+        return;
+      }
       try {
-        const res = await axios.put(`http://localhost:3000/todos/${todoId}`, {
+        let res;
+        const data = {
           subject: todo.value.subject,
           completed: todo.value.completed,
-        });
+          body: todo.value.body,
+        };
+        if (props.editing) {
+          res = await axios.put(`http://localhost:3000/todos/${todoId}`, data);
 
-        originalTodo.value = { ...res.data };
-        triggerToast("Successfully saved!");
+          originalTodo.value = { ...res.data };
+        } else {
+          res = await axios.post(`http://localhost:3000/todos`, data);
+
+          todo.value.subject = "";
+          todo.value.body = "";
+        }
+        const message =
+          "Successfully " + (props.editing ? "Updated!" : "Created!");
+        triggerToast(message);
       } catch (error) {
         console.log(error);
         triggerToast("Something went wrong.", "danger");
@@ -130,6 +151,7 @@ export default {
 
     return {
       todo,
+      subjectError,
       loading,
       showToast,
       toastMessage,
@@ -143,4 +165,22 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.text-red {
+  color: red;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+  transform: translateY(0px);
+}
+</style>
